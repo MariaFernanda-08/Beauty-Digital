@@ -1,16 +1,16 @@
 class Usuario{
     // # estão privados
-    #nome
     #email
-    #senha 
+    #senha
+    #nome 
 
-    constructor(nome, email, senha){
+    constructor(email, senha, nome){
         
         this.#validarEmail(email)
         
-        this.#nome = nome
         this.#email = email
         this.#senha = senha
+        this.#nome = nome
     }
 
     //o que quer liberar para o usuário poder ver
@@ -39,4 +39,5 @@ class Usuario{
     }
 }
 
-module.exports = Usuario
+
+const usuario = new Usuario("a@b.com", "123", "zé")

@@ -10,6 +10,9 @@ class Server{ //toda class tem inicial maiuscula
         this.app = express() //armazenou o express dentro do app - inicializando ele, para utiiza-lo com funções
         this.port = port
 
+        this.app.use(express.json())
+        this.app.use(express.urlencoded({extended:true}))
+
         this.app.use(router)
         this.app.set("view engine", "ejs")
         this.app.set("views", "mvc/views")
