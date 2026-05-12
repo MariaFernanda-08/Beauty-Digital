@@ -1,6 +1,6 @@
 const { Router } = require("express") //usou { } para tirar uma parte do pacote
 const UsuarioController = require("../controllers/UsuarioController")
-const AtendimentoController = require("../controllers/AtendimentoController")
+// const AtendimentoController = require("../controllers/AtendimentoController")
 
 const router = Router()
 

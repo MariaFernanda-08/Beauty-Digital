@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>List</title>
 </head>
 <body>
     <h1>Lista de Usuários</h1>
@@ -34,11 +34,8 @@
     </table>
 </body>
 <script>
-    const btnApagar = document.getElementById("btnApagar")
-    btnApagar.addEventListener("click", apagarUsuario)
-
     async function apagarUsuario(id){
-        const url = "/user/delete" + id
+        const url = "/user/delete/"+id
         const response = await fetch(url, {method:'DELETE'})
 
         const data = await response.json()

@@ -3,16 +3,16 @@ const UsuarioService = require('../../services/UsuarioService')
 class UsuarioController{
     
     constructor(){
-        this.UsuarioService = new UsuarioService()
+        this.usuarioService = new UsuarioService()
     }
 
     async index(req,res){
-        const usuarios = await this.UsuarioService.buscarUsuario(req.params.id)
+        const usuarios = await this.usuarioService.buscarUsuario(req.params.id)
         res.render("Usuario/UsuarioView", {usuarios})
     }
 
     async usuarioListView(req,res){
-        const usuarios = await this.UsuarioService.buscarTodosUsuarios()
+        const usuarios = await this.usuarioService.buscarTodosUsuarios()
         res.render("Usuario/ListView", {usuarios: usuarios})
     }
 
@@ -21,12 +21,12 @@ class UsuarioController{
     }
 
     async usuarioEditView(req,res){
-        const usuario = await this.UsuarioService.buscarUsuario(req.params.id)
+        const usuario = await this.usuarioService.buscarUsuario(req.params.id)
         res.render("Usuario/EditView", {usuario: usuario})
     }
 
     async usuarioPostAsync(req,res){
-        const id = await this.UsuarioService.cadastrarUsuario(
+        const id = await this.usuarioService.cadastrarUsuario(
             req.body.username,
             req.body.email,
             req.body.senha    
@@ -36,7 +36,7 @@ class UsuarioController{
     }
 
     async usuarioPutAsync(req,res){
-        const affectedRows = await this.UsuarioService.atualizarUsuario(
+        const affectedRows = await this.usuarioService.atualizarUsuario(
             req.body.id,
             req.body.username,
             req.body.email,
@@ -47,7 +47,7 @@ class UsuarioController{
     }
     
     async usuarioDeleteAsync(req,res){
-        const affectedRows = await this.UsuarioService.deletarUsuario(req.params.id)
+        const affectedRows = await this.usuarioService.deletarUsuario(req.params.id)
         
         res.json({affectedRows: affectedRows})
     }

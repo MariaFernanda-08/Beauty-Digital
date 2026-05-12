@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Edit</title>
 </head>
 <body>
     <form>
@@ -50,8 +50,6 @@
         const username = document.getElementById("username")
         const email = document.getElementById("email")
         const senha = document.getElementById("senha")
-
-        console.log(username.value)
 
         const url = "/user/edit"
         const response = await fetch(url, {

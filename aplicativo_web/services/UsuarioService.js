@@ -1,4 +1,3 @@
-const { password } = require('../database/database');
 const Usuario = require('../mvc/models/UsuarioModel')
 const UsuarioSchema = require('../schemas/UsuarioSchema')
 
@@ -13,7 +12,7 @@ class UsuarioService{
 
     async buscarUsuario(id){ 
         const dado = await this.#usuarioSchema.findOne({ 
-            where: {id:id}
+            where: { id: id }
         });
         if (!dado){
             return null
@@ -32,10 +31,10 @@ class UsuarioService{
 
     async deletarUsuario(id){ 
         const usuario = await this.#usuarioSchema.findOne({ 
-            where: {id:id}
+            where: { id: id }
         });
         const affectedRows = await usuario.destroy()
-        return affectedRows
+        return affectedRows;
     }
 
     async buscarTodosUsuarios(){ 
@@ -77,7 +76,7 @@ class UsuarioService{
             const model = new Usuario(
                 username || usuario.username, 
                 email || usuario.email, 
-                password || usuario.password) 
+                senha || usuario.password) 
             
             const affectedRows = await this.#usuarioSchema.update(
             {
@@ -89,12 +88,12 @@ class UsuarioService{
                 id:id
               }  
             }
-            )  
+        )  
         rows = affectedRows
-        return rows
-    }
+        }
+    return rows
     }
 
 }
 
-module.exports =  UsuarioService;
+module.exports = UsuarioService;
