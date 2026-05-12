@@ -1,5 +1,6 @@
 class Usuario{
     // # estão privados
+    #id
     #nome
     #email
     #senha 
@@ -14,6 +15,10 @@ class Usuario{
     }
 
     //o que quer liberar para o usuário poder ver
+    get id(){
+        return this.#id
+    }
+    
     get email(){ 
         return this.#email
     } 
@@ -25,9 +30,14 @@ class Usuario{
     get nome(){
         return this.#nome
     }
-
-    set email(valor){ //pode alterar o valor
+    
+    //o programador pode alterar o valor
+    set email(valor){ 
         this.#email = valor 
+    }
+
+    set id(valor){
+        this.#id = valor
     }
 
     #validarEmail(email){

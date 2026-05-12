@@ -12,9 +12,22 @@ class UsuarioService{
     }
 
     async buscarUsuario(id){ 
-        return await this.#usuarioSchema.findOne({ 
+        const dado = await this.#usuarioSchema.findOne({ 
             where: {id:id}
         });
+        if (!dado){
+            return null
+        }
+
+        const usuario = new Usuario(
+            dado.username,
+            dado.email,
+            dado.password
+        )
+
+        usuario.id = dado.id
+        return usuario
+
     }
 
     async deletarUsuario(id){ 
@@ -26,7 +39,19 @@ class UsuarioService{
     }
 
     async buscarTodosUsuarios(){ 
-        return await this.#usuarioSchema.findAll();
+        const usuarios = [] //lista 
+        const dados = await this.#usuarioSchema.findAll();
+
+        for(const usuario of dados){ //usuario é a variavel que armazena os dados da lista
+            const u = new Usuario(
+                usuario.username,
+                usuario.email,
+                usuario.password
+            )
+            u.id = usuario.id
+            usuarios.push(u)    
+        }
+        return usuarios
     }
 
     async cadastrarUsuario(username, email, senha){
