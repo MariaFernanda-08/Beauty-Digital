@@ -38,7 +38,8 @@
             background: white;
             padding: 40px;
             border-radius: 25px;
-            width: 60%;
+            width: 100%;
+            max-width: 1100px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
@@ -124,8 +125,8 @@
         }
 
         .content{
-            margin-left: 260px;
-            width: calc(100% - 260px);
+            margin-left: 120px;
+            width: calc(100% - 120px);
 
             display: flex;
             justify-content: center;
@@ -133,6 +134,13 @@
 
             padding: 40px;
         } 
+
+        .subtitle{
+            text-align: center;
+            color: #888;
+            margin-top: -15px;
+            margin-bottom: 30px;
+        }
 
     </style>
 </head>
@@ -151,7 +159,9 @@
     <div class="content">
         <div class="table-container">
                 <h1 class="title">Lista de Usuários</h1>
-                <table class="table table-hover align-middle">
+                <p class="subtitle">Veja quem são nossos clientes</p>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -170,28 +180,61 @@
                                 <td>••••••</td>
                                 <td class="d-flex gap-2">
                                     <a href="/user/edit/<%= usuario.id %>" class="btn-edit">Editar</a>
-                                    <button onclick="apagarUsuario('<%= usuario.id %>')" id="btnApagar" class="btn-delete">Apagar</button>
+                                    <button onclick="apagarUsuario('<%= usuario.id %>')" id="btnApagar" class="btn-delete" type="button">Apagar</button>
                                 </td>
                             </tr>
                         <% } %>    
                     </tbody>
-                </table>
+                    </table>
+                </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 <script>
     async function apagarUsuario(id){
-        const url = "/user/delete/"+id
-        const response = await fetch(url, {method:'DELETE'})
 
-        const data = await response.json()
+        const resultado = await Swal.fire({
+            title: 'Deseja apagar?',
+            text: 'Essa ação não poderá ser desfeita.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#b57edc',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, apagar',
+            cancelButtonText: 'Cancelar',
+            background: '#fff',
+            color: '#555'
+        })
 
-        if(!response.ok){
-            console.log("Ocorreu um erro na requisição")
+        if(resultado.isConfirmed){
+           const url = "/user/delete/"+id
+            const response = await fetch(url, {method:'DELETE'})
+
+            const data = await response.json()
+
+            if(!response.ok){
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Ocorreu um erro ao apagar.',
+                    icon: 'error',
+                    confirmButtonColor: '#b57edc'
+                })
+                return
+            }
+
+            Swal.fire({
+                title: 'Apagado!',
+                text: 'Usuário removido com sucesso.',
+                icon: 'success',
+                confirmButtonColor: '#b57edc'
+            })
+
+            console.log(data)
+            setTimeout(() => {
+            location.reload() 
+            },1200) 
         }
-
-        console.log(data)
-        location.reload()
     }
 </script>
 </html>

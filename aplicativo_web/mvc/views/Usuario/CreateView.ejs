@@ -23,7 +23,6 @@
             background: linear-gradient(135deg,  #f8c8dc, #b57edc);
             min-height: 100vh;
             display: flex;
-            padding: 30px;
         }
 
         .container-custom{
@@ -33,6 +32,8 @@
             padding: 40px;
             border-radius: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+            margin: auto;
         }
 
         .title{
@@ -55,8 +56,8 @@
         }
 
         .form-control:focus{
-            border-color: #ce6a9c;
-            box-shadow: 0 0 0 0.2rem rgba(214, 51, 132, 0.2);
+            border-color: #8210d3;
+            box-shadow: 0 0 0 0.2rem rgba(219, 11, 191, 0.2);
         }
 
         .btn-custom{
@@ -134,8 +135,9 @@
         }
 
         .content{
-            margin-left: 260px;
-            width: calc(100% - 260px);
+            margin-left: 100px;
+            width: calc(100% - 100px);
+            min-height: 100vh;
 
             display: flex;
             justify-content: center;
@@ -143,6 +145,13 @@
 
             padding: 40px;
         } 
+
+        .subtitle{
+            text-align: center;
+            color: #888;
+            margin-top: -15px;
+            margin-bottom: 30px;
+        }
 
     </style>
 </head>
@@ -162,6 +171,7 @@
         <div class="container-custom">
         <form>
             <h1 class="title">Cadastro de Usuário</h1>
+            <p class="subtitle">Cadastre novos usuários no nosso salão!</p>
             <div class="mb-3">
                 <div>
                     <label for="username" class="form-label">Username</label>
@@ -192,6 +202,7 @@
         </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 <script>
 
@@ -205,29 +216,70 @@
         const email = document.getElementById("email")
         const senha = document.getElementById("senha")
 
-        const url = "/user/create"
-        const response = await fetch(url, {
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(
-                {
-                    username: username.value,
-                    email: email.value,
-                    senha: senha.value,
-                }
-            )
-        })
+        if(username.value === "" || email.value === "" || senha.value === ""){ //validação dos campos
+            Swal.fire({
+                title: 'Campos Obrigatórios',
+                text: 'Preencha todos os campos.',
+                icon: 'warning',
+                confirmButtonColor: '#b57edc'
+            })
+            return
+        } 
 
-        const data = await response.json()
+        try{
+            const url = "/user/create"
+            const response = await fetch(url, {
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        username: username.value,
+                        email: email.value,
+                        senha: senha.value,
+                    }
+                )
+            })
 
-        if(!response.ok){
-            console.log("Ocorreu um erro na requisição")
+            const data = await response.json()
+
+            if(!response.ok){
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Não foi possível cadastrar.',
+                    icon: 'error',
+                    confirmButtonColor: '#b57edc'
+                })
+                return
+            }
+            Swal.fire({
+                title: 'Cadastro realizado!',
+                text: 'Usuário cadastrado com sucesso.',
+                icon: 'success',
+                confirmButtonColor: '#b57edc'
+            })
+            console.log(data)
+
+            // limpa os campos depois da criação
+            username.value = ""
+            email.value = ""
+            senha.value = ""
+
+            //redireciona
+            setTimeout(() => {
+                window.location.href = "/user/list"
+            },1500)
+        }catch(erro){
+            console.log(erro)
+            
+            Swal.fire({
+                title: 'Erro interno',
+                text: 'Tente novamente.',
+                icon: 'error',
+                confirmButtonColor: '#b57edc'
+            })
         }
-
-        console.log(data)
-
     }
 </script>
 </html>

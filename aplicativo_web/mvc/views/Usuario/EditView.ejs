@@ -143,6 +143,21 @@
             padding: 40px;
         } 
 
+        .subtitle{
+            text-align: center;
+            color: #888;
+            margin-top: -15px;
+            margin-bottom: 30px;
+        }
+
+        .back-btn{
+            text-decoration: none;
+            color: #b57edc;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
     </style>
 </head>
 <body>
@@ -159,8 +174,10 @@
     </div>
     <div class="content">
         <div class="container-custom">
+            <a href="/user/list" class="back-btn"> ← Voltar para lista</a>
         <form>
             <h1 class="title">Edição de Usuário</h1>
+            <p class="subtitle">Atualize as informações do usuário</p>
             <input value="<%= usuario.id %>" type="text" id="usuarioId" hidden> 
             <div class="mb-3">
                 <div>
@@ -187,18 +204,19 @@
                 </div>
             </div>
             <div>
-                <button type="submit" id="btnCadastrarUsuario" class="btn-custom">Cadastrar</button>
+                <button type="submit" id="btnCadastrarUsuario" class="btn-custom">Salvar Alterações</button>
             </div>
         </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 <script>
 
     const btnCadastrarUsuario = document.getElementById("btnCadastrarUsuario")
-    btnCadastrarUsuario.addEventListener("click", cadastrarUsuario)
+    btnCadastrarUsuario.addEventListener("click", atualizarUsuario)
 
-    async function cadastrarUsuario(e){
+    async function atualizarUsuario(e){
         e.preventDefault()
         
         const id = document.getElementById("usuarioId")
@@ -206,30 +224,64 @@
         const email = document.getElementById("email")
         const senha = document.getElementById("senha")
 
-        const url = "/user/edit"
-        const response = await fetch(url, {
-            method:'PUT',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(
-                {
-                    id: id.value,
-                    username: username.value,
-                    email: email.value,
-                    senha: senha.value,
-                }
-            )
-        })
-
-        const data = await response.json()
-
-        if(!response.ok){
-            console.log("Ocorreu um erro na requisição")
+        if(username.value === "" || email.value === ""){
+            Swal.fire({
+                title: 'Campos obrigatórios',
+                text: 'Preencha username e email.',
+                icon: 'warning',
+                confirmButtonColor: '#b57edc'
+            })
+            return
         }
+        
+        try{
+            const url = "/user/edit"
+            const response = await fetch(url, {
+                method:'PUT',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        id: id.value,
+                        username: username.value,
+                        email: email.value,
+                        senha: senha.value,
+                    })
+                })
 
-        console.log(data)
+                const data = await response.json()
 
+                if(!response.ok){
+                    Swal.fire({
+                        title: 'Erro!',
+                        text:'Não foi possível atualizar.',
+                        icon:'error',
+                        confirmButtonColor: '#b57edc'
+                    })
+                    return
+                }
+
+                Swal.fire({
+                    title: 'Atualizado',
+                    text: 'Usuário atualizado com sucesso',
+                    icon: 'success',
+                    confirmButtonColor: '#b57edc'
+                })
+
+                console.log(data)
+                setTimeout(() => {
+                    window.location.href = '/user/list'
+                },1500)    
+        }catch(erro){
+            console.log(erro)
+            Swal.fire({
+                title: 'Erro interno',
+                text:'Tente novamente',
+                icon: 'error',
+                confirmButtonColor: '#b57edc'
+            })
+        }
     }
 </script>
 </html>
